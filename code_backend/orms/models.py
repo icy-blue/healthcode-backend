@@ -7,6 +7,11 @@ class User(models.Model):
     password = models.CharField(max_length=50)
     salt = models.CharField(max_length=50)
 
+    class Meta:
+        indexes = [
+            models.indexes.Index(fields=['username'], name='username')
+        ]
+
 
 class HealthUser(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

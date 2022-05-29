@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 
-from config import Config
-from orms import models
-from overall import *
+from .config import Config
+from .orms import models
+from .overall import *
 
 
 def query_session(cookie):

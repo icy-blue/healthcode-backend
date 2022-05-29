@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class SqlConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'orms'
+    name = 'code_backend.orms'

@@ -2,10 +2,10 @@ import hashlib
 
 from django.db import IntegrityError
 
-import session
-from config import Config
-from orms import models
-from overall import *
+from . import session
+from .config import Config
+from .orms import models
+from .overall import *
 
 
 def hash_password(password, salt):
