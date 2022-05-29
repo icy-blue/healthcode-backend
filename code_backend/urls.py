@@ -19,7 +19,7 @@ from . import user
 
 urlpatterns = [
     path('session/login/', user.login),
-    path('session/logout', user.logout),
+    path('session/logout/', user.logout),
     path('user/create/', user.create_user),
 
 ]

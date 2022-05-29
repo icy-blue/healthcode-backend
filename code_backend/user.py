@@ -19,7 +19,7 @@ def hash_password(password, salt):
 @require_POST
 def create_user(request):
     try:
-        text = json.load(request.body)
+        text = json.loads(request.body)
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
     username = text['username']
