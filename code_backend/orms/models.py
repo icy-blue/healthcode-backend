@@ -9,7 +9,7 @@ class User(models.Model):
 
     class Meta:
         indexes = [
-            models.indexes.Index(fields=['username'], name='username')
+            models.indexes.Index(fields=['username'])
         ]
 
 
@@ -36,6 +36,6 @@ class Cookie(models.Model):
 
     class Meta:
         indexes = [
-            models.indexes.Index(fields=['cookie'], name='cookie'),
-            models.indexes.Index(fields=['user'], name='user')
+            models.indexes.Index(fields=['cookie']),
+            models.indexes.Index(fields=['user'])
         ]
