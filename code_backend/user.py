@@ -13,6 +13,9 @@ def hash_password(password, salt):
     data = hashlib.sha256(password.encode('utf-8')).hexdigest()
     data = data + salt
     data = hashlib.sha256(data.encode('utf-8')).hexdigest()
+    front = data[:32]
+    tail = data[32:]
+    data = hex(int(front, 16) ^ int(tail, 16))
     return data
 
 
