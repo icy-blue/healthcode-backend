@@ -10,9 +10,9 @@ from .overall import *
 
 
 def hash_password(password, salt):
-    data = hashlib.sha256(password).hexdigest()
+    data = hashlib.sha256(password.encode('utf-8')).hexdigest()
     data = data + salt
-    data = hashlib.sha256(data).hexdigest()
+    data = hashlib.sha256(data.encode('utf-8')).hexdigest()
     return data
 
 
