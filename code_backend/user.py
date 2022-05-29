@@ -1,6 +1,7 @@
 import hashlib
 
 from django.db import IntegrityError
+from django.views.decorators.http import require_POST
 
 from . import session
 from .config import Config
@@ -15,6 +16,7 @@ def hash_password(password, salt):
     return data
 
 
+@require_POST
 def create_user(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -34,6 +36,7 @@ def create_user(request):
     return exit_json(status='OK', message='')
 
 
+@require_POST
 def login(request):
     username = request.POST.get('username')
     password = request.POST.get('password')
@@ -54,6 +57,7 @@ def login(request):
     return rep.set_cookie('token', cookie)
 
 
+@require_POST
 def logout(request):
     username = request.POST.get('username')
     cookie = request.COOKIES.get('token')
