@@ -43,6 +43,7 @@ def create_user(request):
 @require_POST
 def login(request):
     try:
+        print(request.body)
         text = json.load(request.body)
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
