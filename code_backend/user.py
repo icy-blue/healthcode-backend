@@ -53,9 +53,10 @@ def login(request):
         return exit_json(status='InvalidInput', message='Input key or value missing.')
     if len(password) < 6:
         return exit_json(status='ShortPassword', message='Password is too short.')
-    user = models.User.objects.get(username=username)
-    if not user.exists():
-        return exit_json(status='UserExist', message='User not exists.')
+    try:
+        user = models.User.objects.get(username=username)
+    except models.User.DoesNotExist:
+        return exit_json(status='UserNotExist', message="User doesn't exist.")
     salt = user.salt
     password = hash_password(salt=salt, password=password)
     if password != user[0].password:
