@@ -18,10 +18,14 @@ def hash_password(password, salt):
 
 @require_POST
 def create_user(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    if username is None or password is None:
+    try:
+        text = json.load(request.body)
+    except:
         return exit_json(status='InvalidInput', message='Input invalid.')
+    username = text['username']
+    password = text['password']
+    if username is None or password is None:
+        return exit_json(status='InvalidInput', message='Input key or value missing.')
     if len(password) < 6:
         return exit_json(status='ShortPassword', message='Password is too short.')
     user = models.User.objects.filter(username=username)
@@ -38,10 +42,14 @@ def create_user(request):
 
 @require_POST
 def login(request):
-    username = request.POST.get('username')
-    password = request.POST.get('password')
-    if username is None or password is None:
+    try:
+        text = json.load(request.body)
+    except:
         return exit_json(status='InvalidInput', message='Input invalid.')
+    username = text['username']
+    password = text['password']
+    if username is None or password is None:
+        return exit_json(status='InvalidInput', message='Input key or value missing.')
     if len(password) < 6:
         return exit_json(status='ShortPassword', message='Password is too short.')
     user = models.User.objects.get(username=username)
@@ -59,7 +67,11 @@ def login(request):
 
 @require_POST
 def logout(request):
-    username = request.POST.get('username')
+    try:
+        text = json.load(request.body)
+    except:
+        return exit_json(status='InvalidInput', message='Input invalid.')
+    username = text['username']
     cookie = request.COOKIES.get('token')
     user = models.User.objects.filter(username=username)
     if not user.exists():
