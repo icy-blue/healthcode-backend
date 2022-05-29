@@ -31,7 +31,7 @@ class NuclearicAcid(models.Model):
 
 class Cookie(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    cookie = models.TextField(unique=True)
+    cookie = models.CharField(max_length=50, unique=True)
     TTL = models.DateTimeField()
 
     class Meta:
