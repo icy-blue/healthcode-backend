@@ -1,10 +1,11 @@
-from django.db import IntegrityError
-from sql import models
-from random import Random
-from config import Config
 import hashlib
-from overall import *
+
+from django.db import IntegrityError
+
 import session
+from config import Config
+from orms import models
+from overall import *
 
 
 def hash_password(password, salt):
@@ -48,4 +49,17 @@ def login(request):
     if password != user[0].password:
         return exit_json(status='PasswordMismatch', message='Username and password mismatch.')
     cookie = session.set_session(user.uid)
-    return exit_json(status='OK', message='', cookie=cookie)
+    jsons = generate_json(status='OK', message='')
+    rep = HttpResponse(jsons)
+    return rep.set_cookie('token', cookie)
+
+
+def logout(request):
+    username = request.POST.get('username')
+    cookie = request.COOKIES.get('token')
+    user = models.User.objects.filter(username=username)
+    if not user.exists():
+        return exit_json(status='UserNotFound', message=f'Cannot find user{username}.')
+    uid = user[0].uid
+    session.del_session(uid, cookie)
+    return exit_json(status='OK', message='')

@@ -1,5 +1,7 @@
-from django.shortcuts import render, HttpResponse
 import json
+from random import Random
+
+from django.shortcuts import HttpResponse
 
 
 def exit_json(*args, **kwargs):

@@ -9,7 +9,7 @@ class User(models.Model):
 
 
 class HealthUser(models.Model):
-    uid = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     real_name = models.CharField(max_length=20)
     gender = models.CharField(max_length=10)
     age = models.IntegerField()
@@ -17,14 +17,20 @@ class HealthUser(models.Model):
 
 
 class NuclearicAcid(models.Model):
-    uid = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
     status = models.IntegerField()
-    place = models.CharField()
+    place = models.CharField(max_length=50)
 
 
 class Cookie(models.Model):
-    uid = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     cookie = models.TextField(unique=True)
     TTL = models.DateTimeField()
+
+    class Meta:
+        indexes = [
+            models.indexes.Index(fields=['cookie'], name='cookie'),
+            models.indexes.Index(fields=['user'], name='user')
+        ]
