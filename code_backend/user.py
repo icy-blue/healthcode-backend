@@ -25,10 +25,10 @@ def create_user(request):
         text = json.loads(request.body)
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
+    if 'username' not in text or 'password' not in text:
+        return exit_json(status='InvalidInput', message='Input key or value missing.')
     username = text['username']
     password = text['password']
-    if username is None or password is None:
-        return exit_json(status='InvalidInput', message='Input key or value missing.')
     if len(password) < 6:
         return exit_json(status='ShortPassword', message='Password is too short.')
     user = models.User.objects.filter(username=username)
@@ -50,10 +50,10 @@ def login(request):
         text = json.loads(request.body)
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
+    if 'username' not in text or 'password' not in text:
+        return exit_json(status='InvalidInput', message='Input key or value missing.')
     username = text['username']
     password = text['password']
-    if username is None or password is None:
-        return exit_json(status='InvalidInput', message='Input key or value missing.')
     if len(password) < 6:
         return exit_json(status='ShortPassword', message='Password is too short.')
     try:

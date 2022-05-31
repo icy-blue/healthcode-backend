@@ -11,8 +11,9 @@ def pre_do(request):
         text = json.loads(request.body)
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
-    token = text['token']
-    username = text['username']
+    token = None
+    if 'token' in text:
+        token = text['token']
     if token is None or len(token) == 0:
         return exit_json(status='RequireToken', message='Cannot find token.')
     uid = session.query_session(token)
@@ -22,6 +23,9 @@ def pre_do(request):
         user = models.User.objects.get(uid=uid)
     except IntegrityError:
         return exit_json(status='SQLError', message='SQL server error.')
+    username = None
+    if 'username' in text:
+        username = text['username']
     if username is not None and len(username) != 0 and username != user.username and not user.admin:
         return exit_json(status='InvalidRequest', message='Cannot get others\' information.')
     try:
