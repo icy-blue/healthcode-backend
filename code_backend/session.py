@@ -12,7 +12,7 @@ def query_session(cookie):
     result = models.Cookie.objects.filter(cookie=cookie)
     if not result.exists():
         return None
-    if utc.localize(result[0].TTL) < utc.localize(datetime.now()):
+    if utc.localize(result[0].TTL) < datetime.now():
         return None
     return result[0].user.uid
 
