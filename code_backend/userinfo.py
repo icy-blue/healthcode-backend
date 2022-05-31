@@ -56,15 +56,14 @@ def set_user_info(request):
         return return_data
     info, text = return_data
     try:
-        id = text['id'], age = text['age'], tel = text['tel'], gender = text['gender'], name = text['real_name']
-        if id is not None and id != info.real_id:
-            info.real_id = id
-        if age is not None and age != info.age:
-            info.age = age
-        if tel is not None and tel != info.tel:
-            info.tel = tel
-        if name is not None and name != info.real_name:
-            info.real_name = name
+        if 'id' in text and text['id'] != info.real_id:
+            info.real_id = text['id']
+        if 'age' in text and text['age'] != info.age:
+            info.age = text['age']
+        if 'tel' in text and text['tel'] != info.tel:
+            info.tel = text['tel']
+        if 'real_name' in text and text['real_name'] != info.real_name:
+            info.real_name = text['real_name']
         info.save()
     except:
         return exit_json(status='SQLError', message='Update error')
