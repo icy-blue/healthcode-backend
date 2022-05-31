@@ -8,6 +8,7 @@ from .overall import *
 def query_session(cookie):
     assert cookie is not None and len(cookie) != 0, 'Assert error'
     result = models.Cookie.objects.filter(cookie=cookie)
+    print(result, type(result))
     if not result.exists():
         return None
     if result[0].TTL - datetime.now() < 0:
