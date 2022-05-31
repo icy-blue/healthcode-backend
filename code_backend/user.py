@@ -65,9 +65,7 @@ def login(request):
     if password != user[0].password:
         return exit_json(status='PasswordMismatch', message='Username and password mismatch.')
     cookie = session.set_session(user.uid)
-    jsons = generate_json(status='OK', message='')
-    rep = HttpResponse(jsons)
-    return rep.set_cookie('token', cookie)
+    return exit_json(status='OK', message='', token=cookie)
 
 
 @require_POST
@@ -77,7 +75,7 @@ def logout(request):
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
     username = text['username']
-    cookie = request.COOKIES.get('token')
+    cookie = text['token']
     user = models.User.objects.filter(username=username)
     if not user.exists():
         return exit_json(status='UserNotFound', message=f'Cannot find user{username}.')
