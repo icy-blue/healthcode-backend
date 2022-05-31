@@ -6,6 +6,7 @@ class User(models.Model):
     username = models.CharField(max_length=20, unique=True)
     password = models.CharField(max_length=50)
     salt = models.CharField(max_length=50)
+    admin = models.BooleanField(default=False)
 
     class Meta:
         indexes = [
@@ -13,12 +14,13 @@ class User(models.Model):
         ]
 
 
-class HealthUser(models.Model):
+class UserInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     real_name = models.CharField(max_length=20)
     gender = models.CharField(max_length=10)
     age = models.IntegerField()
-    tel = models.CharField(max_length=11)
+    tel = models.CharField(max_length=15)
+    id = models.CharField(max_length=18)
 
 
 class NuclearicAcid(models.Model):

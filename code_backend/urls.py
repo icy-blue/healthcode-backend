@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.urls import path
 
-from . import user
+from . import user, userinfo
 
 urlpatterns = [
-    path('session/login/', user.login),
-    path('session/logout/', user.logout),
-    path('user/create/', user.create_user),
+    path('session/login', user.login),
+    path('session/logout', user.logout),
+    path('user/create', user.create_user),
+    path('user/get-info', userinfo.get_user_info),
+    path('user/set-info', userinfo.set_user_info),
 
 ]
