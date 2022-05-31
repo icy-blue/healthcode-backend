@@ -7,12 +7,12 @@ from .overall import *
 
 def query_session(cookie):
     assert cookie is not None and len(cookie) != 0, 'Assert error'
-    result = models.Cookie.objects.filter(cookie=cookie)[0]
+    result = models.Cookie.objects.filter(cookie=cookie)
     if not result.exists():
         return None
-    if result.TTL - datetime.now() < 0:
+    if result[0].TTL - datetime.now() < 0:
         return None
-    return result.user.uid
+    return result[0].user.uid
 
 
 def set_session(uid):
