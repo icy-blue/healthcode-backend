@@ -62,7 +62,7 @@ def login(request):
         return exit_json(status='UserNotExist', message="User doesn't exist.")
     salt = user.salt
     password = hash_password(salt=salt, password=password)
-    if password != user[0].password:
+    if password != user.password:
         return exit_json(status='PasswordMismatch', message='Username and password mismatch.')
     cookie = session.set_session(user.uid)
     return exit_json(status='OK', message='', token=cookie)
