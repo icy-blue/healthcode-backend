@@ -43,7 +43,9 @@ def get_user_info(request):
     if isinstance(return_data, str):
         return return_data
     info, _ = return_data
-    data = {'id': info.real_id, 'age': info.age, 'tel': info.tel, 'gender': info.gender, 'real_name': info.real_name}
+    data = {'id': info.real_id, 'tel': info.tel, 'gender': info.gender, 'real_name': info.real_name}
+    if info.age != -1:
+        data['age'] = info.age
     return exit_json(status='OK', message='', data=data)
 
 
