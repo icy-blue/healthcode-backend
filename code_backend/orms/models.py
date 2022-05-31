@@ -20,7 +20,7 @@ class UserInfo(models.Model):
     gender = models.CharField(max_length=10)
     age = models.IntegerField()
     tel = models.CharField(max_length=15)
-    id = models.CharField(max_length=18)
+    real_id = models.CharField(max_length=18)
 
 
 class NuclearicAcid(models.Model):

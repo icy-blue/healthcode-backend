@@ -39,7 +39,7 @@ def get_user_info(request):
     if isinstance(return_data, str):
         return return_data
     info, _ = return_data
-    data = {'id': info.id, 'age': info.age, 'tel': info.tel, 'gender': info.gender, 'real_name': info.real_name}
+    data = {'id': info.real_id, 'age': info.age, 'tel': info.tel, 'gender': info.gender, 'real_name': info.real_name}
     return exit_json(status='OK', message='', data=data)
 
 
@@ -51,8 +51,8 @@ def set_user_info(request):
     info, text = return_data
     try:
         id = text['id'], age = text['age'], tel = text['tel'], gender = text['gender'], name = text['real_name']
-        if id is not None and id != info.id:
-            info.id = id
+        if id is not None and id != info.real_id:
+            info.real_id = id
         if age is not None and age != info.age:
             info.age = age
         if tel is not None and tel != info.tel:
