@@ -29,7 +29,7 @@ def pre_do(request):
     if username is not None and len(username) != 0 and username != user.username and not user.admin:
         return exit_json(status='InvalidRequest', message='Cannot get others\' information.')
     try:
-        info = models.UserInfo.objects.get(user)
+        info = models.UserInfo.objects.get(user=user)
     except models.UserInfo.DoesNotExist:
         info = models.UserInfo.objects.create(user=user)
     except models.UserInfo.MultipleObjectsReturned:
