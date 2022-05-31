@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 
+from pytz import UTC as utc
+
 from .config import Config
 from .orms import models
 from .overall import *
@@ -10,7 +12,7 @@ def query_session(cookie):
     result = models.Cookie.objects.filter(cookie=cookie)
     if not result.exists():
         return None
-    if result[0].TTL < datetime.now():
+    if utc.localize(result[0].TTL) < utc.localize(datetime.now()):
         return None
     return result[0].user.uid
 
