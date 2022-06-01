@@ -55,16 +55,21 @@ def set_user_info(request):
     if isinstance(return_data, HttpResponse):
         return return_data
     info, text = return_data
+    cnt = 0
     try:
         if 'id' in text and text['id'] != info.real_id:
             info.real_id = text['id']
+            cnt += 1
         if 'age' in text and text['age'] != info.age:
             info.age = text['age']
+            cnt += 1
         if 'tel' in text and text['tel'] != info.tel:
             info.tel = text['tel']
+            cnt += 1
         if 'real_name' in text and text['real_name'] != info.real_name:
             info.real_name = text['real_name']
+            cnt += 1
         info.save()
     except:
         return exit_json(status='SQLError', message='Update error')
-    return exit_json(status='OK', message='')
+    return exit_json(status='OK', message=f'{cnt} data updated.')
