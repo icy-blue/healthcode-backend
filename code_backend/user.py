@@ -46,7 +46,7 @@ def create_user(request):
 @require_POST
 def login(request):
     try:
-        print(request.body)
+        # print(request.body)
         text = json.loads(request.body)
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
@@ -71,7 +71,7 @@ def login(request):
 @require_POST
 def logout(request):
     try:
-        text = json.load(request.body)
+        text = json.loads(request.body)
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
     if 'username' not in text or 'token' not in text:
