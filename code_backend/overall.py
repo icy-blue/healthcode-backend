@@ -5,7 +5,7 @@ from django.shortcuts import HttpResponse
 
 
 def exit_json(*args, **kwargs):
-    return HttpResponse(json.dumps(kwargs))
+    return HttpResponse(json.dumps(kwargs), content_type='application/json')
 
 
 def generate_json(*args, **kwargs):
