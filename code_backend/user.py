@@ -74,6 +74,8 @@ def logout(request):
         text = json.load(request.body)
     except:
         return exit_json(status='InvalidInput', message='Input invalid.')
+    if 'username' not in text or 'token' not in text:
+        return exit_json(status='InvalidInput', message='Input key or value missing.')
     username = text['username']
     cookie = text['token']
     user = models.User.objects.filter(username=username)
