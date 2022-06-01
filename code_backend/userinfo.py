@@ -57,16 +57,16 @@ def set_user_info(request):
     info, text = return_data
     cnt = 0
     try:
-        if 'id' in text and text['id'] != info.real_id:
+        if 'id' in text:
             info.real_id = text['id']
             cnt += 1
-        if 'age' in text and text['age'] != info.age:
+        if 'age' in text:
             info.age = text['age']
             cnt += 1
-        if 'tel' in text and text['tel'] != info.tel:
+        if 'tel' in text:
             info.tel = text['tel']
             cnt += 1
-        if 'real_name' in text and text['real_name'] != info.real_name:
+        if 'real_name' in text:
             info.real_name = text['real_name']
             cnt += 1
         info.save()
