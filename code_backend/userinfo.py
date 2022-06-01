@@ -40,7 +40,7 @@ def pre_do(request):
 @require_POST
 def get_user_info(request):
     return_data = pre_do(request)
-    if isinstance(return_data, str):
+    if isinstance(return_data, HttpResponse):
         return return_data
     info, _ = return_data
     data = {'id': info.real_id, 'tel': info.tel, 'gender': info.gender, 'real_name': info.real_name}
@@ -52,7 +52,7 @@ def get_user_info(request):
 @require_POST
 def set_user_info(request):
     return_data = pre_do(request)
-    if isinstance(return_data, str):
+    if isinstance(return_data, HttpResponse):
         return return_data
     info, text = return_data
     try:
