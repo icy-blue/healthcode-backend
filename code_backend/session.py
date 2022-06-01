@@ -7,14 +7,17 @@ from .orms import models
 from .overall import *
 
 
-def query_session(cookie):
-    assert cookie is not None and len(cookie) != 0, 'Assert error'
+def query_user_by_token(cookie):
+    if isinstance(cookie, HttpResponse):
+        return cookie
+    if not isinstance(cookie, str):
+        return response_json(status='CookieInvalid', message='Cookie is not valid.')
     result = models.Cookie.objects.filter(cookie=cookie)
     if not result.exists():
-        return None
+        return response_json(status='CookieNotFound', message='Cookie not found.')
     if result[0].TTL < utc.localize(datetime.now()):
-        return None
-    return result[0].user.uid
+        return response_json(status='CookieOutdated', message='Cookie is outdated.')
+    return result[0].user
 
 
 def set_session(uid):
@@ -47,3 +50,24 @@ def del_session(uid, cookie):
     except:
         return False
     return True
+
+
+def get_user_by_request(request):
+    token = get_token_by_request(request)
+    user = query_user_by_token(token)
+    return user
+
+
+def get_token_by_request(request):
+    token = None
+    try:
+        text = json.loads(request.body)
+    except:
+        return response_json(status='InvalidInput', message='Input invalid.')
+    if 'token' in text:
+        token = text['token']
+    elif 'token' in request.COOKIES:
+        token = request.COOKIES.get('token')
+    if token is None or len(token) == 0:
+        return response_json(status='RequireToken', message='Cannot find token.')
+    return token

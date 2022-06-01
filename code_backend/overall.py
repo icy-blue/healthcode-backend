@@ -4,7 +4,7 @@ from random import Random
 from django.shortcuts import HttpResponse
 
 
-def exit_json(*args, **kwargs):
+def response_json(*args, **kwargs):
     return HttpResponse(json.dumps(kwargs), content_type='application/json')
 
 
@@ -21,3 +21,11 @@ def create_random_string(length):
         # 每次从chars中随机取一位
         salt += chars[random.randint(0, len_chars)]
     return salt
+
+
+def get_dict_from_request(request):
+    try:
+        text = json.loads(request.body)
+    except:
+        return response_json(status='InvalidInput', message='Input invalid.')
+    return text

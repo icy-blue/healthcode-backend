@@ -19,68 +19,58 @@ def hash_password(password, salt):
     return data
 
 
-@require_POST
-def create_user(request):
-    try:
-        text = json.loads(request.body)
-    except:
-        return exit_json(status='InvalidInput', message='Input invalid.')
+def pre_do(request):
+    text = get_dict_from_request(request)
+    if isinstance(text, HttpResponse):
+        return text
     if 'username' not in text or 'password' not in text:
-        return exit_json(status='InvalidInput', message='Input key or value missing.')
+        return response_json(status='InvalidInput', message='Input key or value missing.')
     username = text['username']
     password = text['password']
     if len(password) < 6:
-        return exit_json(status='ShortPassword', message='Password is too short.')
+        return response_json(status='ShortPassword', message='Password is too short.')
+    return None
+
+
+@require_POST
+def create_user(request):
+    do = pre_do(request)
+    if isinstance(do, HttpResponse):
+        return do
     user = models.User.objects.filter(username=username)
     if user.exists():
-        return exit_json(status='UserExist', message='User exists.')
+        return response_json(status='UserExist', message='User exists.')
     salt = create_random_string(Config.salt_len)
     password = hash_password(password, salt)
     try:
         user = models.User.objects.create(username=username, password=password, salt=salt)
     except IntegrityError:
-        return exit_json(status='SQLError', message='SQL server error.')
-    return exit_json(status='OK', message='')
+        return response_json(status='SQLError', message='SQL server error.')
+    return response_json(status='OK', message='')
 
 
 @require_POST
 def login(request):
-    try:
-        # print(request.body)
-        text = json.loads(request.body)
-    except:
-        return exit_json(status='InvalidInput', message='Input invalid.')
-    if 'username' not in text or 'password' not in text:
-        return exit_json(status='InvalidInput', message='Input key or value missing.')
-    username = text['username']
-    password = text['password']
-    if len(password) < 6:
-        return exit_json(status='ShortPassword', message='Password is too short.')
+    do = pre_do(request)
+    if isinstance(do, HttpResponse):
+        return do
     try:
         user = models.User.objects.get(username=username)
     except models.User.DoesNotExist:
-        return exit_json(status='UserNotExist', message="User doesn't exist.")
+        return response_json(status='UserNotExist', message="User doesn't exist.")
     salt = user.salt
     password = hash_password(salt=salt, password=password)
     if password != user.password:
-        return exit_json(status='PasswordMismatch', message='Username and password mismatch.')
+        return response_json(status='PasswordMismatch', message='Username and password mismatch.')
     cookie = session.set_session(user.uid)
-    return exit_json(status='OK', message='', token=cookie)
+    return response_json(status='OK', message='', token=cookie).set_cookie('token', cookie)
 
 
 @require_POST
 def logout(request):
-    try:
-        text = json.loads(request.body)
-    except:
-        return exit_json(status='InvalidInput', message='Input invalid.')
-    if 'username' not in text or 'token' not in text:
-        return exit_json(status='InvalidInput', message='Input key or value missing.')
-    username = text['username']
-    cookie = text['token']
-    user = models.User.objects.filter(username=username)
-    if not user.exists():
-        return exit_json(status='UserNotFound', message=f'Cannot find user{username}.')
+    user = session.get_user_by_request(request)
+    if not isinstance(user, models.User):
+        return response_json(status='UserNotFound', message=f'Not login status.')
     uid = user[0].uid
     session.del_session(uid, cookie)
-    return exit_json(status='OK', message='')
+    return response_json(status='OK', message='')
