@@ -13,7 +13,7 @@ def list_user(request):
     if not user.admin:
         return response_json(status='Forbidden', message='Request is not allowed.')
     limit = request.GET.get('limit') if 'limit' in request.GET else 50
-    limit = max(limit, 50)
+    limit = min(limit, 50)
     offset = request.GET.get('offset') if 'offset' in request.GET else 0
     result = models.User.objects.all()[offset:offset + limit]
     data = []
