@@ -24,8 +24,8 @@ def list_user(request):
             info = models.UserInfo.objects.create(user=user)
         except models.UserInfo.MultipleObjectsReturned:
             return response_json(status='SQLError', message='Multiple Objects Returned.')
-        data.append({'username': i.username, 'is_admin': i.admin, 'id': info.real_id, 'tel': info.tel,
-                     'gender': info.gender, 'real_name': info.real_name})
+        data.append(generate_json(username=i.username, is_admin=i.admin, id=info.real_id, tel=info.tel,
+                                  gender=info.gender, real_name=info.real_name))
     return response_json(status="OK", message="", length=len(data), data=data)
 
 

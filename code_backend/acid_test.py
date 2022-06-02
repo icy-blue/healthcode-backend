@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 
 from django.views.decorators.http import require_POST, require_GET
 
@@ -17,7 +17,13 @@ def query_acid_record(request):
     if username != user.username and not user.admin:
         return response_json(status='Forbidden', message='No privilege.')
     limit = request.GET['limit'] if 'limit' in request.GET else 3
-
+    limit = max(limit, 100)
+    offset = request.GET['offset'] if 'offset' in request.GET else 0
+    result = models.NuclearicAcid.objects.filter(user=user).order_by("time")[offset:offset + limit]
+    export = []
+    for i in result:
+        export.append(generate_json(place=i.place, status=i.status, time=time.strftime(i.time, "%Y-%m-%d %H:%M:%S"))
+    return response_json(status='OK', message='', length=len(export), data=export)
 
 @require_POST
 def add_acid_record(request):
