@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from . import user, userinfo, acid_test
+from . import user, userinfo, acid_test, admin
 
 urlpatterns = [
     path('session/login', user.login),
@@ -25,5 +25,6 @@ urlpatterns = [
     path('user/set-info', userinfo.set_user_info),
     path('record/get-acid', acid_test.query_acid_record),
     path('record/add-acid', acid_test.add_acid_record),
-
+    path('user/list', admin.list_user),
+    path('user/modify-privilege', admin.modify_permission)
 ]
