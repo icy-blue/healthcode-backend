@@ -11,12 +11,12 @@ def query_user_by_token(cookie):
     if isinstance(cookie, HttpResponse):
         return cookie
     if not isinstance(cookie, str):
-        return response_json(status='CookieInvalid', message='Cookie is not valid.')
+        return response_json(status='SessionInvalid', message='Session is not valid.')
     result = models.Cookie.objects.filter(cookie=cookie)
     if not result.exists():
-        return response_json(status='CookieNotFound', message='Cookie not found.')
+        return response_json(status='SessionNotFound', message='Session not found.')
     if result[0].TTL < utc.localize(datetime.now()):
-        return response_json(status='CookieOutdated', message='Cookie is outdated.')
+        return response_json(status='SessionOutdated', message='Session is outdated.')
     return result[0].user
 
 

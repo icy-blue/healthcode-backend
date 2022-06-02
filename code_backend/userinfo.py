@@ -11,7 +11,7 @@ def pre_do(request):
         return text
     user = session.get_user_by_request(request)
     if not isinstance(user, models.User):
-        return response_json(status='TokenInvalid', message='User token is outdated or not existed.')
+        return user
     username = text['username'] if 'username' in text and len(text.get('username')) != 0 else user.username
     if username != user.username and not user.admin:
         return response_json(status='InvalidRequest', message='Cannot get others\' information.')
@@ -55,6 +55,9 @@ def set_user_info(request):
             cnt += 1
         if 'real_name' in text:
             info.real_name = text['real_name']
+            cnt += 1
+        if 'gender' in text:
+            info.gender = text['gender']
             cnt += 1
         info.save()
     except:

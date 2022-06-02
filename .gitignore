@@ -1,2 +1,5 @@
 venv/
 .idea/
+code_backend/__pycache__/
+code_backend/orms/__pycache__/
+code_backend/orms/migrations/

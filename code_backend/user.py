@@ -68,7 +68,9 @@ def login(request):
     if password != user.password:
         return response_json(status='PasswordMismatch', message='Username and password mismatch.')
     cookie = session.set_session(user.uid)
-    return response_json(status='OK', message='', token=cookie).set_cookie('token', cookie)
+    rep = response_json(status='OK', message='', is_admin=user.admin, token=cookie)
+    rep.set_cookie('token', cookie)
+    return rep
 
 
 @require_POST
@@ -81,4 +83,6 @@ def logout(request):
     if not isinstance(cookie, str):
         return cookie
     session.del_session(uid, cookie)
-    return response_json(status='OK', message='').delete_cookie('token')
+    rep = response_json(status='OK', message='')
+    rep.delete_cookie('token')
+    return rep
