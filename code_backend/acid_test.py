@@ -22,7 +22,7 @@ def query_acid_record(request):
     result = models.NuclearicAcid.objects.filter(user=user).order_by("time")[offset:offset + limit]
     export = []
     for i in result:
-        export.append(generate_json(place=i.place, status=i.status, time=time.strftime(i.time, "%Y-%m-%d %H:%M:%S"))
+        export.append(generate_json(place=i.place, status=i.status, time=time.strftime(i.time, "%Y-%m-%d %H:%M:%S")))
     return response_json(status='OK', message='', length=len(export), data=export)
 
 @require_POST
