@@ -39,7 +39,7 @@ def add_acid_record(request):
         return response_json(status='IDError', message='Cannot find id.')
     id = text['id']
     try:
-        des = models.User.objects.get(id=id)
+        des = models.UserInfo.objects.get(real_id=id)
     except models.UserInfo.DoesNotExist:
         return response_json(status='NotFoundError', message='User not found.')
     except models.UserInfo.MultipleObjectsReturned:
@@ -49,5 +49,5 @@ def add_acid_record(request):
     if 'status' not in text or not isinstance(text.get('status'), int):
         return response_json(status='StatusError', message='Cannot read status.')
     status = int(text['status'])
-    models.NuclearicAcid.objects.create(user=des, place=place, time=time, status=status)
+    models.NuclearicAcid.objects.create(user=des.user, place=place, time=time, status=status)
     return response_json(status='OK', message='')
