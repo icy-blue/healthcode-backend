@@ -41,13 +41,14 @@ def modify_permission(request):
     username = text['username'] if 'username' in text else None
     if username is None or len(username) == 0:
         return response_json(status='UsernameNotFound', message='Cannot find username')
-    user = models.User.objects.filter(username=username)
-    if not user.exists():
+    try:
+        user = models.User.objects.get(username=username)
+    except:
         return response_json(status="UserNotFound", message=f'Cannot find user {username}.')
     is_admin = text['is_admin'] if 'is_admin' in text else True
     try:
-        user[0].admin = is_admin
-        user[0].save()
+        user.admin = is_admin
+        user.save()
     except:
         return response_json(status="SQLError", message="SQL server error.")
-    return response_json(status="OK", message=f"User {username} is {'admin' if is_admin else 'normal user'}.")
+    return response_json(status="OK", message=f"User {username} changed to {'admin' if is_admin else 'normal user'}.")
