@@ -18,7 +18,7 @@ class UserInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     real_name = models.CharField(max_length=20)
     gender = models.CharField(max_length=10)
-    age = models.IntegerField(default=-1)
+    age = models.IntegerField(default=0)
     tel = models.CharField(max_length=15)
     real_id = models.CharField(max_length=18, unique=True)
 

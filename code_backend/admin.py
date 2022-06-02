@@ -1,6 +1,6 @@
 from django.views.decorators.http import require_POST, require_GET
 
-from . import session
+from . import session, userinfo
 from .orms import models
 from .overall import *
 
@@ -21,10 +21,11 @@ def list_user(request):
         try:
             info = models.UserInfo.objects.get(user=i)
         except models.UserInfo.DoesNotExist:
-            info = models.UserInfo.objects.create(user=i)
+            info = models.UserInfo.objects.create(user=i, real_id=userinfo.get_random_id())
         except models.UserInfo.MultipleObjectsReturned:
             return response_json(status='SQLError', message='Multiple Objects Returned.')
-        data.append(generate_dict(username=i.username, is_admin=i.admin, id=info.real_id, tel=info.tel,
+        id = info.real_id if userinfo.is_random_id(info.real_id) else ''
+        data.append(generate_dict(username=i.username, is_admin=i.admin, id=id, tel=info.tel,
                                   gender=info.gender, real_name=info.real_name))
     return response_json(status="OK", message="", length=len(data), data=data)
 

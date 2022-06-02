@@ -5,6 +5,14 @@ from .orms import models
 from .overall import *
 
 
+def get_random_id():
+    return '###' + create_random_string(15)
+
+
+def is_random_id(id):
+    return id[:3] == '###'
+
+
 def pre_do(request):
     text = get_dict_from_request(request)
     if isinstance(text, HttpResponse):
@@ -18,7 +26,7 @@ def pre_do(request):
     try:
         info = models.UserInfo.objects.get(user=user)
     except models.UserInfo.DoesNotExist:
-        info = models.UserInfo.objects.create(user=user)
+        info = models.UserInfo.objects.create(user=user, real_id=get_random_id())
     except models.UserInfo.MultipleObjectsReturned:
         return response_json(status='SQLError', message='Multiple Objects Returned.')
     return info, text
@@ -30,9 +38,8 @@ def get_user_info(request):
     if isinstance(return_data, HttpResponse):
         return return_data
     info, _ = return_data
-    data = {'id': info.real_id, 'tel': info.tel, 'gender': info.gender, 'real_name': info.real_name}
-    if info.age != -1:
-        data['age'] = info.age
+    data = {'tel': info.tel, 'gender': info.gender, 'real_name': info.real_name, 'age': info.age,
+            'id': info.real_id if is_random_id(info.real_id) else ''}
     return response_json(status='OK', message='', data=data)
 
 
