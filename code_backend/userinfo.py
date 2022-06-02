@@ -13,7 +13,7 @@ def pre_do(request):
     if not isinstance(user, models.User):
         return response_json(status='TokenInvalid', message='User token is outdated or not existed.')
     username = text['username'] if 'username' in text and len(text.get('username')) != 0 else user.username
-    if len(username) != 0 and username != user.username and not user.admin:
+    if username != user.username and not user.admin:
         return response_json(status='InvalidRequest', message='Cannot get others\' information.')
     try:
         info = models.UserInfo.objects.get(user=user)
