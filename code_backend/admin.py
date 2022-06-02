@@ -50,4 +50,4 @@ def modify_permission(request):
         user[0].save()
     except:
         return response_json(status="SQLError", message="SQL server error.")
-    return response_json(status="OK", message=f"User {username} ")
+    return response_json(status="OK", message=f"User {username} is {'admin' if is_admin else 'normal user'}.")
