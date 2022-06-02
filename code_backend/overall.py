@@ -12,6 +12,10 @@ def generate_json(*args, **kwargs):
     return json.dumps(kwargs)
 
 
+def generate_dict(*args, **kwargs):
+    return kwargs
+
+
 def create_random_string(length):
     salt = ''
     chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz0123456789'
