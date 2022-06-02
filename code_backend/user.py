@@ -25,7 +25,6 @@ def pre_do(request):
         return text
     if 'username' not in text or 'password' not in text:
         return response_json(status='InvalidInput', message='Input key or value missing.')
-    username = text['username']
     password = text['password']
     if len(password) < 6:
         return response_json(status='ShortPassword', message='Password is too short.')
@@ -37,6 +36,9 @@ def create_user(request):
     do = pre_do(request)
     if isinstance(do, HttpResponse):
         return do
+    text = get_dict_from_request(request)
+    username = text.get('username')
+    password = text.get('password')
     user = models.User.objects.filter(username=username)
     if user.exists():
         return response_json(status='UserExist', message='User exists.')
@@ -54,6 +56,9 @@ def login(request):
     do = pre_do(request)
     if isinstance(do, HttpResponse):
         return do
+    text = get_dict_from_request(request)
+    username = text.get('username')
+    password = text.get('password')
     try:
         user = models.User.objects.get(username=username)
     except models.User.DoesNotExist:
@@ -71,6 +76,9 @@ def logout(request):
     user = session.get_user_by_request(request)
     if not isinstance(user, models.User):
         return response_json(status='UserNotFound', message=f'Not login status.')
-    uid = user[0].uid
+    uid = user.uid
+    cookie = session.get_token_by_request(request)
+    if not isinstance(cookie, str):
+        return cookie
     session.del_session(uid, cookie)
-    return response_json(status='OK', message='')
+    return response_json(status='OK', message='').delete_cookie('token')
