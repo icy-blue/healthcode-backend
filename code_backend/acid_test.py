@@ -25,6 +25,7 @@ def query_acid_record(request):
         export.append(generate_json(place=i.place, status=i.status, time=time.strftime(i.time, "%Y-%m-%d %H:%M:%S")))
     return response_json(status='OK', message='', length=len(export), data=export)
 
+
 @require_POST
 def add_acid_record(request):
     text = get_dict_from_request(request)
@@ -33,7 +34,7 @@ def add_acid_record(request):
         return user
     if not user.admin:
         return response_json(status='Forbidden', message='No privilege.')
-    place = text['place'] if 'place' in text else None
+    place = text['place'] if 'place' in text else ''
     time = datetime.strptime(text['time'], '%Y-%m-%d %H:%M:%S') if 'time' in text else datetime.now()
     if 'status' not in text or not isinstance(text.get('status'), int):
         return response_json(status='StatusError', message='Cannot read status.')
