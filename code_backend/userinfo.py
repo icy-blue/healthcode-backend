@@ -9,12 +9,11 @@ def pre_do(request):
     text = get_dict_from_request(request)
     if isinstance(text, HttpResponse):
         return text
-    token = text['token'] if 'token' in text else None
-    user = session.get_user_by_token(token)
+    user = session.get_user_by_request(request)
     if not isinstance(user, models.User):
         return response_json(status='TokenInvalid', message='User token is outdated or not existed.')
-    username = text['username'] if 'username' in text else None
-    if username is not None and len(username) != 0 and username != user.username and not user.admin:
+    username = text['username'] if 'username' in text and len(text.get('username')) != 0 else user.username
+    if len(username) != 0 and username != user.username and not user.admin:
         return response_json(status='InvalidRequest', message='Cannot get others\' information.')
     try:
         info = models.UserInfo.objects.get(user=user)

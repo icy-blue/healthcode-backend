@@ -25,8 +25,7 @@ class UserInfo(models.Model):
 
 class NuclearicAcid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField()
-    time = models.TimeField()
+    time = models.DateTimeField()
     status = models.IntegerField()
     place = models.CharField(max_length=50)
 
