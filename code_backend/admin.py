@@ -21,7 +21,7 @@ def list_user(request):
         try:
             info = models.UserInfo.objects.get(user=i)
         except models.UserInfo.DoesNotExist:
-            info = models.UserInfo.objects.create(user=user)
+            info = models.UserInfo.objects.create(user=i)
         except models.UserInfo.MultipleObjectsReturned:
             return response_json(status='SQLError', message='Multiple Objects Returned.')
         data.append(generate_dict(username=i.username, is_admin=i.admin, id=info.real_id, tel=info.tel,
