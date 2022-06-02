@@ -16,9 +16,9 @@ def query_acid_record(request):
         request.GET['username']) != 0 else user.username
     if username != user.username and not user.admin:
         return response_json(status='Forbidden', message='No privilege.')
-    limit = request.GET['limit'] if 'limit' in request.GET else 3
+    limit = int(request.GET['limit']) if 'limit' in request.GET else 3
     limit = min(limit, 10)
-    offset = request.GET['offset'] if 'offset' in request.GET else 0
+    offset = int(request.GET['offset']) if 'offset' in request.GET else 0
     result = models.NuclearicAcid.objects.filter(user=user).order_by("time")[offset:offset + limit]
     export = []
     for i in result:
