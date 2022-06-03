@@ -32,7 +32,6 @@ def pre_do(request):
     return info, text
 
 
-@require_POST
 def get_user_info(request):
     return_data = pre_do(request)
     if isinstance(return_data, HttpResponse):
