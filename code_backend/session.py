@@ -60,13 +60,16 @@ def get_user_by_request(request):
 
 def get_token_by_request(request):
     token = None
-    try:
-        text = json.loads(request.body)
-    except:
-        return response_json(status='InvalidInput', message='Input invalid.')
-    if 'token' in text:
-        token = text['token']
-    elif 'token' in request.COOKIES:
+    if request.method == 'GET' and 'token' in request.GET:
+        token = request.GET['token']
+    else:
+        try:
+            text = json.loads(request.body)
+        except:
+            return response_json(status='InvalidInput', message='Input invalid.')
+        if 'token' in text:
+            token = text['token']
+    if 'token' in request.COOKIES:
         token = request.COOKIES.get('token')
     if token is None or len(token) == 0:
         return response_json(status='RequireToken', message='Cannot find token.')
