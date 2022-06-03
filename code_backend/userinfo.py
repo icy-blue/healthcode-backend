@@ -22,7 +22,7 @@ def pre_do(request):
         return user
     username = text['username'] if 'username' in text and len(text.get('username')) != 0 else user.username
     if username != user.username and not user.admin:
-        return response_json(status='InvalidRequest', message='Cannot get others\' information.')
+        return response_json(status='Forbidden', message='Cannot get others\' information.')
     try:
         info = models.UserInfo.objects.get(user=user)
     except models.UserInfo.DoesNotExist:
@@ -39,7 +39,7 @@ def get_user_info(request):
         return return_data
     info, _ = return_data
     data = {'tel': info.tel, 'gender': info.gender, 'real_name': info.real_name, 'age': info.age,
-            'id': info.real_id if is_random_id(info.real_id) else ''}
+            'id': info.real_id if not is_random_id(info.real_id) else ''}
     return response_json(status='OK', message='', data=data)
 
 
@@ -52,7 +52,7 @@ def set_user_info(request):
     cnt = 0
     try:
         if 'id' in text:
-            info.real_id = text['id']
+            info.real_id = text['id'] if text['id'] != '' else get_random_id()
             cnt += 1
         if 'age' in text:
             info.age = text['age']
@@ -68,5 +68,5 @@ def set_user_info(request):
             cnt += 1
         info.save()
     except:
-        return response_json(status='SQLError', message='Update error')
+        return response_json(status='SQLError', message='SQL server error.')
     return response_json(status='OK', message=f'{cnt} data updated.')
