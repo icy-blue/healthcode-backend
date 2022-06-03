@@ -24,7 +24,7 @@ def list_user(request):
             info = models.UserInfo.objects.create(user=i, real_id=userinfo.get_random_id())
         except models.UserInfo.MultipleObjectsReturned:
             return response_json(status='SQLError', message='Multiple Objects Returned.')
-        id = info.real_id if userinfo.is_random_id(info.real_id) else ''
+        id = info.real_id if not userinfo.is_random_id(info.real_id) else ''
         data.append(generate_dict(username=i.username, is_admin=i.admin, id=id, tel=info.tel,
                                   gender=info.gender, real_name=info.real_name))
     return response_json(status="OK", message="", length=len(data), data=data)
