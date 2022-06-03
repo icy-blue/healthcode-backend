@@ -75,14 +75,10 @@ def login(request):
 
 @require_POST
 def logout(request):
-    user = session.get_user_by_request(request)
-    if not isinstance(user, models.User):
-        return response_json(status='UserNotFound', message=f'Not login status.')
-    uid = user.uid
     cookie = session.get_token_by_request(request)
     if not isinstance(cookie, str):
         return cookie
-    session.del_session(uid, cookie)
+    session.del_session(cookie)
     rep = response_json(status='OK', message='')
     rep.delete_cookie('token')
     return rep

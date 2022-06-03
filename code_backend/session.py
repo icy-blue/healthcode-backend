@@ -39,11 +39,10 @@ def set_session(uid):
     return cookie
 
 
-def del_session(uid, cookie):
+def del_session(cookie):
     assert cookie is not None and len(cookie) != 0, 'Assert error'
     try:
-        user = models.User.objects.get(uid=uid)
-        result = models.Cookie.objects.filter(cookie=cookie, user=user)
+        result = models.Cookie.objects.filter(cookie=cookie)
         if result.exists():
             result[0].delete()
             result[0].save()
