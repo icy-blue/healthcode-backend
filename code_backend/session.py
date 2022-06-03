@@ -69,7 +69,7 @@ def get_token_by_request(request):
             return response_json(status='InvalidInput', message='Input invalid.')
         if 'token' in text:
             token = text['token']
-    if token is not None and 'token' in request.COOKIES:
+    if token is None and 'token' in request.COOKIES:
         token = request.COOKIES.get('token')
     if token is None or len(token) == 0:
         return response_json(status='RequireToken', message='Cannot find token.')
