@@ -60,8 +60,9 @@ def get_user_by_request(request):
 
 def get_token_by_request(request):
     token = None
-    if request.method == 'GET' and 'token' in request.GET:
-        token = request.GET['token']
+    if request.method == 'GET':
+        if 'token' in request.GET:
+            token = request.GET['token']
     else:
         try:
             text = json.loads(request.body)
