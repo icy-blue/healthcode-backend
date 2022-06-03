@@ -19,7 +19,7 @@ def query_acid_record(request):
     limit = int(request.GET['limit']) if 'limit' in request.GET else 3
     limit = min(limit, 10)
     offset = int(request.GET['offset']) if 'offset' in request.GET else 0
-    result = models.NuclearicAcid.objects.filter(user=user).order_by("time")[offset:offset + limit]
+    result = models.NuclearicAcid.objects.filter(user=user).order_by("-time")[offset:offset + limit]
     export = []
     for i in result:
         export.append(
