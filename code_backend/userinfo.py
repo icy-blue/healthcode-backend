@@ -23,6 +23,11 @@ def pre_do(request):
     username = text['username'] if 'username' in text and len(text.get('username')) != 0 else user.username
     if username != user.username and not user.admin:
         return response_json(status='Forbidden', message='Cannot get others\' information.')
+    if username != user.username:
+        try:
+            user = models.User.objects.get(username=username)
+        except models.User.DoesNotExist:
+            return response_json(status='UserNotExist', message="User doesn't exist.")
     try:
         info = models.UserInfo.objects.get(user=user)
     except models.UserInfo.DoesNotExist:
