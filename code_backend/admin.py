@@ -40,7 +40,7 @@ def modify_permission(request):
         return response_json(status='Forbidden', message='Request is not allowed.')
     username = text['username'] if 'username' in text else None
     if username is None or len(username) == 0:
-        return response_json(status='UsernameNotFound', message='Cannot find username')
+        return response_json(status='UsernameNotFound', message='Cannot find username.')
     try:
         user = models.User.objects.get(username=username)
     except:

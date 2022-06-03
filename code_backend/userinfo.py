@@ -72,5 +72,6 @@ def set_user_info(request):
             cnt += 1
         info.save()
     except:
-        return response_json(status='SQLError', message='SQL server error.')
+        return response_json(status='SQLError', message=f'SQL server error. '
+                                                        f'Is id {info.real_id} unique or less than 18 bits?')
     return response_json(status='OK', message=f'{cnt} data updated.')
