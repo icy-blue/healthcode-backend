@@ -28,8 +28,11 @@ def create_random_string(length):
 
 
 def get_dict_from_request(request):
-    try:
-        text = json.loads(request.body)
-    except:
-        return response_json(status='InvalidInput', message='Input invalid.')
-    return text
+    if request.method == "POST":
+        try:
+            text = json.loads(request.body)
+        except:
+            return response_json(status='InvalidInput', message='Input invalid.')
+        return text
+    else:
+        return request.GET
