@@ -36,7 +36,9 @@ def add_acid_record(request):
     if not user.admin:
         return response_json(status='Forbidden', message='No privilege.')
     if 'id' not in text:
-        return response_json(status='IDError', message='Cannot find id.')
+        return response_json(status='InvalidInput', message='Input key or value missing.')
+    if 'status' not in text or not isinstance(text.get('status'), int):
+        return response_json(status='InvalidInput', message='Input key or value missing.')
     id = text['id']
     try:
         des = models.UserInfo.objects.get(real_id=id)
@@ -46,8 +48,6 @@ def add_acid_record(request):
         return response_json(status='SQLError', message='Multiple Objects Returned.')
     place = text['place'] if 'place' in text else ''
     time = datetime.strptime(text['time'], '%Y-%m-%d %H:%M:%S') if 'time' in text else datetime.now()
-    if 'status' not in text or not isinstance(text.get('status'), int):
-        return response_json(status='StatusError', message='Cannot read status.')
     status = int(text['status'])
     models.NuclearicAcid.objects.create(user=des.user, place=place, time=time, status=status)
     return response_json(status='OK', message='')
