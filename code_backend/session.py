@@ -74,3 +74,25 @@ def get_token_by_request(request):
     if token is None or len(token) == 0:
         return response_json(status='RequireToken', message='Cannot find token.')
     return token
+
+
+def clear_other_session(request):
+    user = get_user_by_request(request)
+    token = get_token_by_request(request)
+    if user is None:
+        user = query_user_by_token(cookie)
+    if not isinstance(user, models.User):
+        return user
+    try:
+        sessions = models.Cookie.objects.filter(user=user)
+    except:
+        return response_json(status='SQLError', message='SQL server error.')
+    try:
+        if sessions.exists():
+            for it in sessions:
+                if it.cookie != cookie:
+                    it.delete()
+                    it.save()
+    except:
+        return response_json(status='SQLError', message='SQL delete session error.')
+    return True

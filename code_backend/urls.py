@@ -26,5 +26,6 @@ urlpatterns = [
     path('record/get-acid', acid_test.query_acid_record),
     path('record/add-acid', acid_test.add_acid_record),
     path('user/list', admin.list_user),
-    path('user/modify-privilege', admin.modify_permission)
+    path('user/modify-privilege', admin.modify_permission),
+    path('user/change-password', user.change_password)
 ]

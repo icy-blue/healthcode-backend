@@ -83,3 +83,28 @@ def logout(request):
     rep = response_json(status='OK', message='')
     rep.delete_cookie('token')
     return rep
+
+
+@require_POST
+def change_password(request):
+    text = get_dict_from_request(request)
+    user = session.get_user_by_request(request)
+    if isinstance(user, HttpResponse):
+        return user
+    if 'old_password' not in text or 'new_password' not in text:
+        return response_json(status='InvalidInput', message='Input key or value missing.')
+    old = text.get('old_password')
+    new = text.get('new_password')
+    if len(old) < 6 or len(new) < 6:
+        return response_json(status='ShortPassword', message='Password is too short.')
+    salt = user.salt
+    password = hash_password(salt=salt, password=old)
+    if password != user.password:
+        return response_json(status='PasswordMismatch', message='Username and password mismatch.')
+    try:
+        user.password = hash_password(new, salt)
+        user.save()
+    except:
+        return response_json(status='SQLError', message='SQL server error.')
+    session.clear_other_session(request)
+    return response_json()
