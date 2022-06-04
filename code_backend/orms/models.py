@@ -40,3 +40,30 @@ class Cookie(models.Model):
             models.indexes.Index(fields=['cookie']),
             models.indexes.Index(fields=['user'])
         ]
+
+
+class Color(models.Model):
+    class Type(models.IntegerChoices):
+        Green = 1
+        Yellow = 2
+        Red = 3
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    color = models.IntegerField(choices=Type.choices)
+
+
+class Place(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+
+class Passing(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)
+    time = models.DateTimeField()
+
+    class Meta:
+        indexes = [
+            models.indexes.Index(fields=['place']),
+            models.indexes.Index(fields=['user']),
+            models.indexes.Index(fields=['time'])
+        ]
