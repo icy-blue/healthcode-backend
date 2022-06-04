@@ -95,4 +95,4 @@ def clear_other_session(request):
                     it.save()
     except:
         return response_json(status='SQLError', message='SQL delete session error.')
-    return True
+    return user

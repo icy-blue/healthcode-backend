@@ -106,5 +106,7 @@ def change_password(request):
         user.save()
     except:
         return response_json(status='SQLError', message='SQL server error.')
-    session.clear_other_session(request)
+    out = session.clear_other_session(request)
+    if isinstance(out, HttpResponse):
+        return out
     return response_json(status='OK', message='')
