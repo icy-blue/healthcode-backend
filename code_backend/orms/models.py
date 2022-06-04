@@ -1,7 +1,5 @@
-from datetime import datetime
-
 from django.db import models
-
+from django.utils.timezone import now
 
 class User(models.Model):
     uid = models.AutoField(primary_key=True)
@@ -27,7 +25,7 @@ class UserInfo(models.Model):
 
 class NuclearicAcid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    time = models.DateTimeField(default=datetime.now())
+    time = models.DateTimeField(default=now())
     status = models.IntegerField()
     place = models.CharField(max_length=50)
 
@@ -35,7 +33,7 @@ class NuclearicAcid(models.Model):
 class Cookie(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cookie = models.CharField(max_length=50, unique=True)
-    TTL = models.DateTimeField(default=datetime.now())
+    TTL = models.DateTimeField(default=now())
 
     class Meta:
         indexes = [
@@ -53,7 +51,7 @@ class Color(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     color = models.IntegerField(choices=Type.choices)
-    update_time = models.DateTimeField(default=datetime.now())
+    update_time = models.DateTimeField(default=now())
 
 
 class Place(models.Model):
@@ -63,7 +61,7 @@ class Place(models.Model):
 class Passing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
-    time = models.DateTimeField(default=datetime.now())
+    time = models.DateTimeField(default=now())
 
     class Meta:
         indexes = [
