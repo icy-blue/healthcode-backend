@@ -5,8 +5,7 @@ from .orms import models
 from .overall import *
 
 
-@require_GET
-def list_user(request):
+def admin_query_template(request):
     user = session.get_user_by_request(request)
     if not isinstance(user, models.User):
         return user
@@ -15,6 +14,15 @@ def list_user(request):
     limit = int(request.GET.get('limit')) if 'limit' in request.GET else 50
     limit = min(limit, 50)
     offset = int(request.GET.get('offset')) if 'offset' in request.GET else 0
+    return limit, offset
+
+
+@require_GET
+def list_user(request):
+    out = admin_query_template(request)
+    if isinstance(out, HttpResponse):
+        return out
+    limit, offset = out
     result = models.User.objects.all()[offset:offset + limit]
     data = []
     for id, i in enumerate(result):
