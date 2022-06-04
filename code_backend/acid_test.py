@@ -47,7 +47,10 @@ def add_acid_record(request):
     except models.UserInfo.MultipleObjectsReturned:
         return response_json(status='SQLError', message='Multiple Objects Returned.')
     place = text['place'] if 'place' in text else ''
-    time = datetime.strptime(text['time'], '%Y-%m-%d %H:%M:%S') if 'time' in text else datetime.now()
+    try:
+        time = datetime.strptime(text['time'], '%Y-%m-%d %H:%M:%S') if 'time' in text else datetime.now()
+    except:
+        return response_json(status='TimeError', message='Cannot parse time.')
     status = int(text['status'])
     models.NuclearicAcid.objects.create(user=des.user, place=place, time=time, status=status)
     return response_json(status='OK', message='')
