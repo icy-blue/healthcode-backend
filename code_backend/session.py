@@ -80,7 +80,7 @@ def clear_other_session(request):
     user = get_user_by_request(request)
     token = get_token_by_request(request)
     if user is None:
-        user = query_user_by_token(cookie)
+        user = query_user_by_token(token)
     if not isinstance(user, models.User):
         return user
     try:
@@ -90,7 +90,7 @@ def clear_other_session(request):
     try:
         if sessions.exists():
             for it in sessions:
-                if it.cookie != cookie:
+                if it.cookie != token:
                     it.delete()
                     it.save()
     except:
