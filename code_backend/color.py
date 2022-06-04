@@ -5,13 +5,13 @@ from code_backend.orms import models
 from .overall import *
 
 
-def set_color(user, color, time):
+def set_color(user, _color, time):
     try:
         color = models.Color.objects.get(user=user)
-        color.color = color
+        color.color = _color
         color.save()
     except models.Color.DoesNotExist:
-        models.Color.objects.create(user=user, color=color, update_time=time)
+        models.Color.objects.create(user=user, color=_color, update_time=time)
 
 
 @require_GET
