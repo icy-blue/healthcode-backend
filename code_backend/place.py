@@ -49,7 +49,11 @@ def stay_place(request):
     if 'place' not in text:
         return response_json(status='InvalidInput', message='Input key or value missing.')
     time = datetime.strptime(text['time'], '%Y-%m-%d %H:%M:%S') if 'time' in text else datetime.now()
-    place = text['place']
+    placename = text['place']
+    try:
+        place = models.Place.objects.get(name=placename)
+    except:
+        return response_json(status='NotFoundError', message=f'Cannot find place {placename}.')
     try:
         models.Stay.objects.create(user=user, place=place, time=time)
     except:
