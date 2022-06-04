@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.views.decorators.http import require_GET
 
 from code_backend import session
@@ -13,7 +11,7 @@ def set_color(user, color, time):
         color.color = color
         color.save()
     except models.Color.DoesNotExist:
-        models.Color.objects.create(user=user, color=color, time=time)
+        models.Color.objects.create(user=user, color=color, update_time=time)
 
 
 @require_GET
@@ -22,5 +20,5 @@ def get_color(request):
     try:
         color = models.Color.objects.get(user=user)
     except models.Color.DoesNotExist:
-        color = models.Color.objects.create(user=user, color=models.Color.Type.Undefined, time=datetime.now())
+        color = models.Color.objects.create(user=user, color=models.Color.Type.Undefined)
     return response_json(status='OK', message='', color=color.color)
