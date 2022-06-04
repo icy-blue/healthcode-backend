@@ -60,8 +60,8 @@ def add_acid_record(request):
         if status != Config.positive_status:
             pass
         timepoint = datetime.now() - timedelta(seconds=Config.traceback_time)
-        places = models.Place.objects.filter(user=des.user, passing__time__gte=timepoint)
-        records = models.Passing.objects.filter(place__in=places, time__gt=timepoint)
+        places = models.Place.objects.filter(passing__user=des.user, passing__time__gte=timepoint)
+        records = models.Passing.objects.filter(place__in=places, time__gte=timepoint)
         if records.exists():
             for it in records:
                 if it.user != des.user:
