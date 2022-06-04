@@ -15,7 +15,7 @@ class User(models.Model):
 
 
 class UserInfo(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     real_name = models.CharField(max_length=20)
     gender = models.CharField(max_length=10)
     age = models.IntegerField(default=0)
@@ -48,7 +48,7 @@ class Color(models.Model):
         Yellow = 2
         Red = 3
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, unique=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     color = models.IntegerField(choices=Type.choices)
 
 
