@@ -27,7 +27,7 @@ class UserInfo(models.Model):
 
 class NuclearicAcid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    time = models.DateTimeField()
+    time = models.DateTimeField(default=datetime.now())
     status = models.IntegerField()
     place = models.CharField(max_length=50)
 
@@ -35,7 +35,7 @@ class NuclearicAcid(models.Model):
 class Cookie(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cookie = models.CharField(max_length=50, unique=True)
-    TTL = models.DateTimeField()
+    TTL = models.DateTimeField(default=datetime.now())
 
     class Meta:
         indexes = [
@@ -53,7 +53,7 @@ class Color(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     color = models.IntegerField(choices=Type.choices)
-    update_time = models.DateTimeField()
+    update_time = models.DateTimeField(default=datetime.now())
 
 
 class Place(models.Model):
