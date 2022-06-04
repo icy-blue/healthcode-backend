@@ -56,7 +56,7 @@ class Place(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
 
-class Passing(models.Model):
+class Stay(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     time = models.DateTimeField()

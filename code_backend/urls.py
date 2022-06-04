@@ -29,5 +29,6 @@ urlpatterns = [
     path('user/modify-privilege', admin.modify_permission),
     path('user/change-password', user.change_password),
     path('place/add', place.add_place),
-    path('place/list', place.list_place)
+    path('place/list', place.list_place),
+    path('place/stay', place.stay_place)
 ]
