@@ -28,7 +28,6 @@ def set_session(uid):
     result = models.Cookie.objects.filter(user=user).order_by("TTL")
     if result.count() > Config.max_session:
         result[0].delete()
-        result[0].save()
     cookie = create_random_string(Config.session_length)
     while models.Cookie.objects.filter(cookie=cookie).count() != 0:
         cookie = create_random_string(Config.session_length)
@@ -45,7 +44,6 @@ def del_session(cookie):
         result = models.Cookie.objects.filter(cookie=cookie)
         if result.exists():
             result[0].delete()
-            result[0].save()
     except:
         return False
     return True
@@ -92,7 +90,6 @@ def clear_other_session(request):
             for it in sessions:
                 if it.cookie != token:
                     it.delete()
-                    it.save()
     except:
         return response_json(status='SQLError', message='SQL delete session error.')
     return user
