@@ -1,8 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.views.decorators.http import require_POST, require_GET
 
 from . import session
+from .color import set_color
+from .config import Config
 from .orms import models
 from .overall import *
 
@@ -52,5 +54,19 @@ def add_acid_record(request):
     except:
         return response_json(status='TimeError', message='Cannot parse time.')
     status = int(text['status'])
+    try:
+        set_color(des.user, models.Color.Type.Red if status == Config.positive_status else models.Color.Type.Green,
+                  time)
+        if status != Config.positive_status:
+            pass
+        timepoint = datetime.now() - timedelta(seconds=Config.traceback_time)
+        places = models.Place.objects.filter(user=des.user, passing__time__gte=timepoint)
+        records = models.Passing.objects.filter(place__in=places, time__gt=timepoint)
+        if records.exists():
+            for it in records:
+                if it.user != des.user:
+                    set_color(it.user, models.Color.Type.Yellow, time)
+    except models.Color.MultipleObjectsReturned:
+        return response_json(status='SQLError', message='Multiple Objects Returned.')
     models.NuclearicAcid.objects.create(user=des.user, place=place, time=time, status=status)
     return response_json(status='OK', message='')

@@ -47,9 +47,11 @@ class Color(models.Model):
         Green = 1
         Yellow = 2
         Red = 3
+        Undefined = 4
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     color = models.IntegerField(choices=Type.choices)
+    update_time = models.DateTimeField()
 
 
 class Place(models.Model):
