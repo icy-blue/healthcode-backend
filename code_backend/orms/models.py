@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 
@@ -61,7 +63,7 @@ class Place(models.Model):
 class Passing(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
-    time = models.DateTimeField()
+    time = models.DateTimeField(default=datetime.now())
 
     class Meta:
         indexes = [
