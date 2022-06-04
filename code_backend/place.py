@@ -14,7 +14,7 @@ def list_place(request):
     result = models.Place.objects.all()[offset:offset + limit]
     data = []
     for it in result:
-        data.append(generate_dict(name=it.name))
+        data.append(it.name)
     return response_json(status="OK", message="", length=len(data), data=data)
 
 
