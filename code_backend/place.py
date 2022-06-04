@@ -55,7 +55,7 @@ def stay_place(request):
     except:
         return response_json(status='NotFoundError', message=f'Cannot find place {placename}.')
     try:
-        models.Stay.objects.create(user=user, place=place, time=time)
+        models.Passing.objects.create(user=user, place=place, time=time)
     except:
         return response_json(status='SQLError', message='SQL server error.')
     return response_json(status='OK', message='')
