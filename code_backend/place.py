@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.views.decorators.http import require_POST, require_GET
+from pytz import utc
 
 from . import session, admin, color
 from .config import Config
@@ -50,7 +51,7 @@ def stay_place(request):
     if 'place' not in text:
         return response_json(status='InvalidInput', message='Input key or value missing.')
     try:
-        time = datetime.strptime(text['time'], '%Y-%m-%d %H:%M:%S') if 'time' in text else datetime.now()
+        time = datetime.strptime(text['time'], '%Y-%m-%d %H:%M:%S') if 'time' in text else utc.localize(datetime.now())
     except:
         return response_json(status='TimeError', message='Cannot parse time.')
     placename = text['place']
