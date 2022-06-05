@@ -22,11 +22,14 @@ def get_color(request):
     user = session.get_user_by_request(request)
     if not isinstance(user, models.User):
         return user
-    if 'id' in text:
+    if 'id' in text or 'username' in text:
         if not user.admin:
             return response_json(status='Forbidden', message='Request is not allowed.')
         try:
-            user = models.UserInfo.objects.filter(id=text['id'])
+            if 'id' in text:
+                user = models.UserInfo.objects.filter(id=text['id'])
+            else:
+                user = models.UserInfo.objects.filter(user__username=text['username'])
         except models.UserInfo.DoesNotExist:
             return response_json(status='NotFoundError', message='User not found.')
         except models.UserInfo.MultipleObjectsReturned:
