@@ -78,7 +78,7 @@ def logout(request):
     cookie = session.get_token_by_request(request)
     if not isinstance(cookie, str):
         return cookie
-    if session.del_session(cookie):
+    if not session.del_session(cookie):
         return response_json(status='SQLError', message='SQL server error.')
     rep = response_json(status='OK', message='')
     rep.delete_cookie('token')
