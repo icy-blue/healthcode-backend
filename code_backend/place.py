@@ -61,7 +61,7 @@ def stay_place(request):
         return response_json(status='NotFoundError', message=f'Cannot find place {placename}.')
     try:
         timepoint = time - timedelta(seconds=Config.traceback_time)
-        warn = models.Color.objects.filter(color=models.Color.Type.Red)
+        warn = models.Color.objects.filter(color=models.Color.Type.Red).values('user')
         passing = models.Passing.objects.filter(place=place, user__in=warn, time__gte=timepoint)
         if passing.exists():
             color.set_color(user, models.Color.Type.Yellow, time)
