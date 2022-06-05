@@ -8,8 +8,10 @@ from .overall import *
 def set_color(user, _color, time):
     try:
         color = models.Color.objects.get(user=user)
-        color.color = _color
-        color.save()
+        if color.update_time < time:
+            color.color = _color
+            color.time = time
+            color.save()
     except models.Color.DoesNotExist:
         models.Color.objects.create(user=user, color=_color, update_time=time)
 

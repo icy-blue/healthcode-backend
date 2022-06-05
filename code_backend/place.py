@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.views.decorators.http import require_POST, require_GET
 
-from . import session, admin
+from . import session, admin, color
+from .config import Config
 from .orms import models
 from .overall import *
 
@@ -58,6 +59,11 @@ def stay_place(request):
     except:
         return response_json(status='NotFoundError', message=f'Cannot find place {placename}.')
     try:
+        timepoint = time - timedelta(seconds=Config.traceback_time)
+        warn = models.Color.objects.filter(color=models.Color.Type.Red)
+        passing = models.Passing.objects.filter(place=place, user__in=warn, time__gte=timepoint)
+        if passing.exists():
+            color.set_color(user, models.Color.Type.Yellow, time)
         models.Passing.objects.create(user=user, place=place, time=time)
     except:
         return response_json(status='SQLError', message='SQL server error.')
