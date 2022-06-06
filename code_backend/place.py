@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 from django.views.decorators.http import require_POST, require_GET
+from pytz import utc
 
 from . import session, admin, color
 from .config import Config
@@ -64,7 +65,7 @@ def stay_place(request):
         passing = models.Passing.objects.filter(place=place, user__in=warn, time__gte=timepoint)
         if passing.exists():
             color.set_color(user, models.Color.Type.Yellow, time)
-        models.Passing.objects.create(user=user, place=place, time=time)
+        models.Passing.objects.create(user=user, place=place, time=utc.localize(time))
     except:
         return response_json(status='SQLError', message='SQL server error.')
     return response_json(status='OK', message='')
