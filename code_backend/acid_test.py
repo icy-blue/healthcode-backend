@@ -58,15 +58,14 @@ def add_acid_record(request):
     try:
         set_color(des.user, models.Color.Type.Red if status == Config.positive_status else models.Color.Type.Green,
                   time)
-        if status != Config.positive_status:
-            pass
-        timepoint = time - timedelta(seconds=Config.traceback_time)
-        places = models.Place.objects.filter(passing__user=des.user, passing__time__gte=timepoint)
-        records = models.Passing.objects.filter(place__in=places, time__gte=timepoint)
-        if records.exists():
-            for it in records:
-                if it.user != des.user:
-                    set_color(it.user, models.Color.Type.Yellow, time)
+        if status == Config.positive_status:
+            timepoint = time - timedelta(seconds=Config.traceback_time)
+            places = models.Place.objects.filter(passing__user=des.user, passing__time__gte=timepoint)
+            records = models.Passing.objects.filter(place__in=places, time__gte=timepoint)
+            if records.exists():
+                for it in records:
+                    if it.user != des.user:
+                        set_color(it.user, models.Color.Type.Yellow, time)
     except models.Color.MultipleObjectsReturned:
         return response_json(status='SQLError', message='Multiple Objects Returned.')
     models.NuclearicAcid.objects.create(user=des.user, place=place, time=time, status=status)
