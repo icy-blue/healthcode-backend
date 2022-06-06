@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.views.decorators.http import require_GET
 from pytz import utc
 
@@ -39,5 +41,6 @@ def get_color(request):
     try:
         color = models.Color.objects.get(user=user)
     except models.Color.DoesNotExist:
-        color = models.Color.objects.create(user=user, color=models.Color.Type.Undefined)
+        time = datetime.strptime("1970-01-01 00:00:00", '%Y-%m-%d %H:%M:%S')
+        color = models.Color.objects.create(user=user, color=models.Color.Type.Undefined, update_time=time)
     return response_json(status='OK', message='', color=color.color)
