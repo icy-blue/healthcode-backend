@@ -1,4 +1,5 @@
 from django.views.decorators.http import require_GET
+from pytz import utc
 
 from code_backend import session
 from code_backend.orms import models
@@ -6,6 +7,7 @@ from .overall import *
 
 
 def set_color(user, _color, time):
+    time = utc.localize(time)
     try:
         color = models.Color.objects.get(user=user)
         if color.update_time < time:
